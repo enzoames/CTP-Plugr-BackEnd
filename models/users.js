@@ -43,5 +43,10 @@ module.exports = (sequelize, DataTypes) => {
       user.password = hashedPassword;
     })
   );
+
+  Users.associate = (models) => {
+    Users.belongsToMany(models.Teams, {through: 'UsersTeams'});
+  }
+
   return Users;
 };
