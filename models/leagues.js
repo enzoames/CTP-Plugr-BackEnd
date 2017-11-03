@@ -1,28 +1,27 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var Leagues = sequelize.define('Leagues', {
-    league_id: {
+    leagueId: {
         type: DataTypes.INTEGER,
         primaryKey: true
     },
-    organizer: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: Users,
-            key: 'user_id'
-        }
-    },
-    league_name: DataTypes.STRING,
-    league_est: DataTypes.DATE,
-    league_desc: DataTypes.STRING,
-    team_count: DataTypes.INTEGER,
-    unique_rules: DataTypes.STRING,
-    field_address: DataTypes.STRING,
+    leagueName: DataTypes.STRING,
+    leagueEst: DataTypes.DATE,
+    leagueDesc: DataTypes.STRING,
+    teamCount: DataTypes.INTEGER,
+    uniqueRules: DataTypes.STRING,
+    fieldAddress: DataTypes.STRING,
     city: DataTypes.STRING,
     state: DataTypes.STRING,
     zipCode: DataTypes.STRING,
-    league_pict: DataTypes.BLOB,
-    league_logo: DataTypes.BLOB
+    leaguePict: DataTypes.BLOB,
+    leagueLogo: DataTypes.BLOB
   });
-  return Teams;
+
+  Leagues.associate = (models) => {
+      Leagues.belongsTo(models.Users, {foreignKey: 'organizer', targetKey: 'userId'});
+      Leagues.belongsToMany(models.Teams, {through: 'LeaguesTeams'});
+  }
+  
+  return Leagues;
 };
