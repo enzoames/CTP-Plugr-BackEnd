@@ -7,9 +7,9 @@ const router = express.Router();
 // TODO: Implement This Route
 router.get('/', (req, res) => {
     models.Teams.findAll()
-        .then((allTeams) => {
+        .then((teams) => {
             res.json({
-                teams: allTeams,
+                teams: teams,
                 msg: "Successful GET to '/' route"
             })
         });
