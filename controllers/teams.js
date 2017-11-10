@@ -6,9 +6,13 @@ const router = express.Router();
 // GET information top teams in NYC
 // TODO: Implement This Route
 router.get('/', (req, res) => {
-    res.json({
-        msg: "Successful GET to '/' route"
-    });
+    models.Teams.findAll()
+        .then((allTeams) => {
+            res.json({
+                teams: allTeams,
+                msg: "Successful GET to '/' route"
+            })
+        });
 });
 
 // GET information for a given team
