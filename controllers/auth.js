@@ -1,5 +1,6 @@
 const express = require('express');
 const models = require('../models');
+const Users = models.Users;
 
 const router = express.Router();
 
@@ -42,6 +43,7 @@ router.post('/logout', (req, res) => {
 // ============== REGISTER ==============
 // ======================================
 
+//currently not taking profilePhoto!
 router.post('/register', (req, res) => {
     console.log("\n\nbody: ", req.body);
     // models.Users.create({
@@ -53,9 +55,21 @@ router.post('/register', (req, res) => {
     // .catch(() => {
     //   res.sendStatus(400);
     // })
-    res.json({
-        msg: "Successful POST to register"
-    });
+        Users.create({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password: req.body.password
+      }).then((user) => {
+        req.login(user, () =>
+          res.redirect('/profile')
+        );
+      }).catch((e) => {
+        res.json({
+        msg: e
+        });
+              });
+    
 });
 
 module.exports = router;

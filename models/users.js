@@ -4,24 +4,10 @@ const bcrypt = require('bcrypt-nodejs');
 
 module.exports = (sequelize, DataTypes) => {
   var Users = sequelize.define('Users', {
-  	userId:{
-  		type: DataTypes.INTEGER,
-  		primaryKey: true,
-  	},
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     email: DataTypes.STRING,
-    phone: DataTypes.STRING,
-    dob: DataTypes.STRING,
-    username: DataTypes.STRING,
-    password: DataTypes.STRING,
-    address: DataTypes.STRING,
-    city: DataTypes.STRING,
-    state: DataTypes.STRING,
-    zipCode: DataTypes.STRING,
-    country: DataTypes.STRING,
-    credential: DataTypes.STRING,
-    profilePhoto: DataTypes.BLOB
+    password: DataTypes.STRING
   }, {
     getterMethods: {
       fullName() {
@@ -29,10 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
-  /*once League and Team models are defined, add the followings to add their FK to user
-  	Users.belongsTo(League);
-  	Users.belongsTo(Team);
-  */
+
   Users.beforeCreate((user) =>
     new sequelize.Promise((resolve) => {
       bcrypt.hash(user.password, null, null, (err, hashedPassword) => {
@@ -42,10 +25,5 @@ module.exports = (sequelize, DataTypes) => {
       user.password = hashedPassword;
     })
   );
-
-  Users.associate = (models) => {
-    Users.belongsToMany(models.Teams, {through: 'UsersTeams'});
-  }
-
   return Users;
 };
