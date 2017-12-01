@@ -1,5 +1,6 @@
 const express = require('express');
 const models = require('../models');
+const passport = require('../middlewares/authentication');
 const Users = models.Users;
 
 const router = express.Router();
@@ -20,9 +21,16 @@ router.get('/load', (req, res) => {
 // ===================================
 
 router.post('/login', (req, res) => {
+    /*
     res.json({
         msg: "Successful POST To login"
     });
+    */
+    
+    passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+  })(req, res);
 });
 
 
