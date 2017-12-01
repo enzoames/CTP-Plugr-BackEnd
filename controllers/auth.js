@@ -67,7 +67,8 @@ router.post('/register', (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        userType: req.body.userType
       }).then((user) => {
         req.login(user, () =>
           res.redirect('/profile')
