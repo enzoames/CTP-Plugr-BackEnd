@@ -6,8 +6,12 @@ const router = express.Router();
 // GET all teams belonging to a league
 // TODO: Implement This Route
 router.get('/', (req, res) => {
-    res.json({
-        msg: "Successful GET to '/' route"
+    models.Leagues.findAll()
+    .then((leagues) => {
+        res.json({
+            teams: leagues,
+            msg: "Successful GET to '/' route"
+        })
     });
 });
 
