@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     models.Leagues.findAll()
     .then((leagues) => {
         res.json({
-            teams: leagues,
+            leagues: leagues,
             msg: "Successful GET to '/' route"
         })
     });

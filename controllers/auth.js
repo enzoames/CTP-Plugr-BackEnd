@@ -2,6 +2,7 @@ const express = require('express');
 const models = require('../models');
 const passport = require('../middlewares/authentication');
 const Users = models.Users;
+const Teams = models.Teams;
 
 const router = express.Router();
 
@@ -20,38 +21,18 @@ router.get('/load', (req, res) => {
 // ============== LOGIN ==============
 // ===================================
 
-router.post('/login', (req, res, next) => {
-    /*
-    res.json({
-        msg: "Successful POST To login"
-    });
-    */
- /*  
-    passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-  })(req, res);
-*/
 
-passport.authenticate('local', function(err, user, info)
-{
-    if(!user){
-        res.json({
-            msg: "Failure POST to login"
-        });
-    }else{
-        Users.findOne({where: {email: user.email} }).then(user =>{
+router.post('/login', 
+    passport.authenticate('local'),
+    (req, res) =>{
+        Users.findOne({where: {email: req.user.email} }).then(user =>{
             res.json({
             users: user,
             msg: "Successful GET to '/' route"
             })
         });
-    }
-    
-})(req, res, next);
-//passport.authenticate('local', {successFlash: 'Welcome!'});
-
 });
+ 
 
 
 
@@ -74,15 +55,6 @@ router.post('/logout', (req, res) => {
 //currently not taking profilePhoto!
 router.post('/register', (req, res) => {
     console.log("\n\nbody: ", req.body);
-    // models.Users.create({
-    //   question: req.body.question
-    // })
-    // .then((user) => {
-    //   res.json(user);
-    // })
-    // .catch(() => {
-    //   res.sendStatus(400);
-    // })
         Users.create({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -93,6 +65,28 @@ router.post('/register', (req, res) => {
         req.login(user, () =>
           res.redirect('/profile')
         );
+      }).catch((e) => {
+          console.log(e);
+        res.json({
+        msg: e
+        });
+    });
+    
+});
+
+router.post('/team-register', (req, res) => {
+    
+        Teams.create({ 
+            teamName: req.body.teamName,
+            teamAbbr: req.body.teamAbbr,
+            description: req.body.description,
+            teamPicture: req.body.teamPicture,
+            teamLogo: req.body.teamLogo,
+            teamCaptain: req.user.id
+      }).then((team) => {
+        res.json({
+        msg: "Successful Team Registration"
+            });
       }).catch((e) => {
           console.log(e);
         res.json({

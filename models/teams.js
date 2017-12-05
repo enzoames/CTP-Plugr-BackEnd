@@ -12,9 +12,16 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: function(models) {
+        //models.Teams.hasMany(models.Users);
         // associations can be defined here
+
       }
     }
   });
+
+  Teams.associate = (models) => {
+    models.Teams.belongsTo(models.Users, {as:'TeamCaptain', foreignKey: 'teamCaptain'});
+  }
+
   return Teams;
 };
