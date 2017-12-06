@@ -1,6 +1,6 @@
 const express = require('express');
 const models = require('../models');
-
+const Teams = models.Teams;
 const router = express.Router();
 
 // GET information top teams in NYC
@@ -22,6 +22,29 @@ router.get('/:id', (req, res) => {
         msg: "Successful GET to '/:id' route"
     });
 });
+
+router.post('/register', (req, res) => {
+    
+        Teams.create({ 
+            teamName: req.body.teamName,
+            teamAbbr: req.body.teamAbbr,
+            description: req.body.description,
+            teamPicture: req.body.teamPicture,
+            teamLogo: req.body.teamLogo,
+            teamCaptain: req.user.id
+      }).then((team) => {
+        res.json({
+        msg: "Successful Team Registration"
+            });
+      }).catch((e) => {
+          console.log(e);
+        res.json({
+        msg: e
+        });
+              });
+    
+});
+
 
 
 module.exports = router;

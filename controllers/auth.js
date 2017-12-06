@@ -71,7 +71,6 @@ router.post('/register', (req, res) => {
         msg: e
         });
     });
-    
 });
 
 router.post('/team-register', (req, res) => {
@@ -93,7 +92,6 @@ router.post('/team-register', (req, res) => {
         msg: e
         });
               });
-    
 });
 
 module.exports = router;
