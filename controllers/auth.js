@@ -54,22 +54,39 @@ router.post('/logout', (req, res) => {
 
 //currently not taking profilePhoto!
 router.post('/register', (req, res) => {
-    console.log("\n\nbody: ", req.body);
-        Users.create({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        password: req.body.password,
-        userType: req.body.userType
-      }).then((user) => {
-        req.login(user, () =>
-          res.redirect('/profile')
-        );
-      }).catch((e) => {
-          console.log(e);
-        res.json({
-        msg: e
+    
+    /** The following helper function checks whether the provided email already exist in the DB */
+    function isEmailUsed(email){
+        return Users.count({where: {email: email}})
+        .then(count => {
+            if (count !== 0){
+                return true;
+            }
+            return false;
         });
+    }
+
+    isEmailUsed(req.body.email).then(isEmailUsed =>{
+        if (isEmailUsed){
+            res.json({
+                msg: "The email address provided has been used to register an account before"
+            });
+        }
+        else{
+            Users.create({
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                email: req.body.email,
+                password: req.body.password,
+                userType: req.body.userType
+            })
+            .then((newUser) => {
+                res.json(newUser);
+            })
+        }
+    })
+    .catch((e) => {
+        res.sendStatus(500);
     });
 });
 
@@ -94,5 +111,3 @@ router.post('/team-register', (req, res) => {
 });
 
 module.exports = router;
-
-
