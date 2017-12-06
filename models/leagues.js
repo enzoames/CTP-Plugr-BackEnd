@@ -19,5 +19,9 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
+
+  Leagues.associate = (models) => {
+    Leagues.belongsTo(models.Users, {as:'LeagueOrganizer', foreignKey: 'leagueOrganizer'});
+  }
   return Leagues;
 };

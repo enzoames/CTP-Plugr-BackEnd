@@ -1,6 +1,6 @@
 const express = require('express');
 const models = require('../models');
-
+const Leagues = models.Leagues;
 const router = express.Router();
 
 // GET all teams belonging to a league
@@ -38,6 +38,29 @@ router.get('/city/:zip', (req, res) => {
         msg: "Successful GET to '/city/:zip' route"
     });
 });
+
+router.post('/register', (req, res) => {
+    
+        Leagues.create({ 
+            name: req.body.name,
+            established: req.body.established,
+            description: req.body.description,
+            uniqueRules: req.body.uniqueRules,
+            state: req.body.state,
+            leagueOrganizer: req.user.id
+      }).then((team) => {
+        res.json({
+        msg: "Successful League Registration"
+            });
+      }).catch((e) => {
+          console.log(e);
+        res.json({
+        msg: e
+        });
+              });
+    
+});
+
 
 
 module.exports = router;

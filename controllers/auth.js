@@ -74,7 +74,6 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/team-register', (req, res) => {
-    
         Teams.create({ 
             teamName: req.body.teamName,
             teamAbbr: req.body.teamAbbr,
