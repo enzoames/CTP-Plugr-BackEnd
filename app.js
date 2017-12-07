@@ -1,10 +1,23 @@
 const express = require('express');
 const expressSession = require('express-session');
 const passport = require('./middlewares/authentication');
+var cors = require('cors');
 
 const PORT = process.env.PORT || 8000;
 
 const app = express();
+
+
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.options('*', cors()); 
+
+
 
 // Access Body Data
 const bodyParser = require('body-parser');
@@ -16,14 +29,14 @@ app.use(expressSession(({ secret: 'keyboard cat', resave: false, saveUninitializ
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Load Views
-const handlebars = require('express-handlebars');
-app.engine('handlebars', handlebars({
-  layoutsDir: './views/layouts',
-  defaultLayout: 'main',
-}));
-app.set('view engine', 'handlebars');
-app.set('views', `${__dirname}/views/`);
+// // Load Views
+// const handlebars = require('express-handlebars');
+// app.engine('handlebars', handlebars({
+//   layoutsDir: './views/layouts',
+//   defaultLayout: 'main',
+// }));
+// app.set('view engine', 'handlebars');
+// app.set('views', `${__dirname}/views/`);
 
 // Load Controller
 const controllers = require('./controllers');
